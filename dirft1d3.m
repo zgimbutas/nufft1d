@@ -3,9 +3,9 @@ function fk=dirft1d3(nj,xj,cj,iflag,nk,sk)
 %
 %  FK = DIRFT1D3(NJ,XJ,CJ,IFLAG,NK,SK);
 %
-%                 1  nj
-%     fk(k)    = -- SUM cj(j) exp(+/-i s(k) xj(j)) 
-%                nj j=1
+%                  nj
+%     fk(k)    =  SUM cj(j) exp(+/-i s(k) xj(j)) 
+%                 j=1
 %
 %     If (iflag .ge.0) the + sign is used in the exponential.
 %     If (iflag .lt.0) the - sign is used in the exponential.
