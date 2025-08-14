@@ -4,7 +4,7 @@ function fk=dirft1d3(nj,xj,cj,iflag,nk,sk)
 %  FK = DIRFT1D3(NJ,XJ,CJ,IFLAG,NK,SK);
 %
 %                  nj
-%     fk(k)    =  SUM cj(j) exp(+/-i s(k) xj(j)) 
+%     fk(k)    =  SUM cj(j) exp(+/-i s(k) xj(j))
 %                 j=1
 %
 %     If (iflag .ge.0) the + sign is used in the exponential.
@@ -21,7 +21,7 @@ function fk=dirft1d3(nj,xj,cj,iflag,nk,sk)
 %     iflag  determines sign of FFT (see above)
 %     nk     number of (noninteger) Fourier modes computed
 %     sk     k-values (locations) of desired Fourier modes
-%                 
+%
 %  Output parameters:
 %
 %     fk     Fourier transform values (complex *16)

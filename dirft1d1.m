@@ -4,7 +4,7 @@ function fk=dirft1d1(nj,xj,cj,iflag,ms)
 %  FK = DIRFT1D1(NJ,XJ,CJ,IFLAG,MS);
 %
 %               1  nj
-%     fk(k1) = -- SUM cj(j) exp(+/-i k1 xj(j)) 
+%     fk(k1) = -- SUM cj(j) exp(+/-i k1 xj(j))
 %              nj j=1
 %
 %     for -ms/2 <= k1 <= (ms-1)/2
@@ -22,7 +22,7 @@ function fk=dirft1d1(nj,xj,cj,iflag,ms)
 %     cj     strengths of sources (complex *16)
 %     iflag  determines sign of FFT (see above)
 %     ms     number of Fourier modes computed (-ms/2 to (ms-1)/2 )
-%                 
+%
 %  Output parameters:
 %
 %     fk     Fourier transform values (complex *16)

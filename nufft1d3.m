@@ -4,7 +4,7 @@ function [fk,ier]=nufft1d3(nj,xj,cj,iflag,eps,nk,sk)
 %  [FK,IER] = NUFFT1D3(NJ,XJ,CJ,IFLAG,EPS,NK,SK);
 %
 %                  nj
-%     fk(k)    =  SUM cj(j) exp(+/-i s(k) xj(j)) 
+%     fk(k)    =  SUM cj(j) exp(+/-i s(k) xj(j))
 %                 j=1
 %
 %     If (iflag .ge.0) the + sign is used in the exponential.
@@ -22,11 +22,11 @@ function [fk,ier]=nufft1d3(nj,xj,cj,iflag,eps,nk,sk)
 %     eps    precision request  (between 1.0e-15 and 1.0e-1)
 %     nk     number of (noninteger) Fourier modes computed
 %     sk     k-values (locations) of desired Fourier modes
-%                 
+%
 %  Output parameters:
 %
 %     fk     Fourier transform values (complex *16)
-%     ier    error return code   
+%     ier    error return code
 %            ier = 0  => normal execution.
 %            ier = 1  => precision eps requested is out of range.
 %

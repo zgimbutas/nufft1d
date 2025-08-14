@@ -3,8 +3,8 @@ function cj=dirft1d2(nj,xj,iflag,ms,fk)
 %
 %  CJ = DIRFT1D2(NJ,XJ,IFLAG,MS,FK);
 %
-%     cj(j) = SUM   fk(k1) exp(+/-i k1 xj(j)) 
-%             k1  
+%     cj(j) = SUM   fk(k1) exp(+/-i k1 xj(j))
+%             k1
 %                            for j = 1,...,nj
 %
 %     where -ms/2 <= k1 <= (ms-1)/2

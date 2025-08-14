@@ -4,7 +4,7 @@ function [fk,ier]=nufft1d1(nj,xj,cj,iflag,eps,ms)
 %  [FK,IER] = NUFFT1D1(NJ,XJ,CJ,IFLAG,EPS,MS);
 %
 %               1  nj
-%     fk(k1) = -- SUM cj(j) exp(+/-i k1 xj(j)) 
+%     fk(k1) = -- SUM cj(j) exp(+/-i k1 xj(j))
 %              nj j=1
 %
 %     for -ms/2 <= k1 <= (ms-1)/2
@@ -23,11 +23,11 @@ function [fk,ier]=nufft1d1(nj,xj,cj,iflag,eps,ms)
 %     iflag  determines sign of FFT (see above)
 %     eps    precision request  (between 1.0e-15 and 1.0e-1)
 %     ms     number of Fourier modes computed (-ms/2 to (ms-1)/2 )
-%                 
+%
 %  Output parameters:
 %
 %     fk     Fourier transform values (complex *16)
-%     ier    error return code   
+%     ier    error return code
 %            ier = 0  => normal execution.
 %            ier = 1  => precision eps requested is out of range.
 %

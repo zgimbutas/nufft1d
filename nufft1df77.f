@@ -1,8 +1,8 @@
-cc Copyright (C) 2004-2009: Leslie Greengard and June-Yub Lee 
+cc Copyright (C) 2004-2009: Leslie Greengard and June-Yub Lee
 cc Contact: greengard@cims.nyu.edu
-cc 
+cc
 cc This software is being released under a FreeBSD license
-cc (see license.txt in this directory). 
+cc (see COPYING in this directory).
 c
 c  NUFFT 1.3 release notes:
 c
@@ -16,7 +16,7 @@ c
 c  3) We do not block structure the code so that irregularly placed points
 c  are interpolated (gridded) in a cache-aware fashion.
 c
-c  4) We use the Netlib FFT library (www.netlib.org) 
+c  4) We use the Netlib FFT library (www.netlib.org)
 c     rather than the state of the art FFTW package (www.fftw.org).
 c
 c  Different applications have different needs, and we have chosen
@@ -36,19 +36,19 @@ c ----------------------------------------------------------------------
 c     if (iflag .ge. 0) then
 c
 c               1  nj
-c     fk(k1) = -- SUM cj(j) exp(+i k1 xj(j))  for -ms/2 <= k1 <= (ms-1)/2 
-c              nj j=1                            
+c     fk(k1) = -- SUM cj(j) exp(+i k1 xj(j))  for -ms/2 <= k1 <= (ms-1)/2
+c              nj j=1
 c
 c     else
 c
 c               1  nj
-c     fk(k1) = -- SUM cj(j) exp(-i k1 xj(j))  for -ms/2 <= k1 <= (ms-1)/2 
-c              nj j=1                            
+c     fk(k1) = -- SUM cj(j) exp(-i k1 xj(j))  for -ms/2 <= k1 <= (ms-1)/2
+c              nj j=1
 c
 c     References:
 c
 c     [DR] Fast Fourier transforms for nonequispaced data,
-c          A. Dutt and V. Rokhlin, SIAM J. Sci. Comput. 14, 
+c          A. Dutt and V. Rokhlin, SIAM J. Sci. Comput. 14,
 c          1368-1383, 1993.
 c
 c     [GL] Accelerating the Nonuniform Fast Fourier Transform,
@@ -72,32 +72,32 @@ c     OUTPUT:
 c
 c     fk     Fourier transform values (complex *16)
 c     ier    error return code
-c   
+c
 c            ier = 0  => normal execution.
 c            ier = 1  => precision eps requested is out of range.
 c
 c     The type 1 NUFFT proceeds in three steps (see [GL]).
 c
 c     1) spread data to oversampled regular mesh using convolution with
-c        a Gaussian 
+c        a Gaussian
 c     2) compute FFT on uniform mesh
 c     3) deconvolve each Fourier mode independently
 c          (mutiplying by Fourier transform of Gaussian).
 c
 c ----------------------------------------------------------------------
 c
-c     The oversampled regular mesh is defined by 
+c     The oversampled regular mesh is defined by
 c
 c     nf1 = rat*ms  points, where rat is the oversampling ratio.
-c       
-c     For simplicity, we set  
+c
+c     For simplicity, we set
 c
 c         rat = 2 for eps > 1.0d-11
 c         rat = 3 for eps <= 1.0d-11.
 c
 c     The Gaussian used for convolution is:
 c
-c        g(x) = exp(-x^2 / 4tau) 
+c        g(x) = exp(-x^2 / 4tau)
 c
 c     It can be shown [DR] that the precision eps is achieved when
 c
@@ -116,11 +116,11 @@ c ----------------------------------------------------------------------
 c     Fast Gaussian gridding is based on the following observation.
 c
 c     Let hx = 2*pi/nf1. In gridding data onto a regular mesh with
-c     spacing nf1, we shift the source point xj by pi so 
+c     spacing nf1, we shift the source point xj by pi so
 c     that it lies in [0,2*pi] to simplify the calculations.
 c     Since we are viewing the function
 c     as periodic, this has no effect on the result.
-c    
+c
 c     For source (xj+pi), let kb*hx denote the closest grid point and
 c     let  kx*hx be a regular grid point within the spreading
 c     distance. We can write
@@ -137,7 +137,7 @@ c         = exp(-pi/lamb/rat^2 *(diff - (kx-kb))**2)
 c         = exp(-t1 *(diff - (kx-kb))**2)
 c         = exp(-t1*diff**2) * exp(2*t1*diff)**k * exp(-t1*k**2)
 c           where k = kx-kb.
-c 
+c
 c************************************************************************
 c
 c     Precision dependent parameters
@@ -153,23 +153,23 @@ c -------------------------------
       endif
       if (eps.le.1d-11) then
          rat = 3.0d0
-      else 
+      else
          rat = 2.0d0
       endif
       nspread = int(-log(eps)/(pi*(rat-1d0)/(rat-.5d0)) + .5d0)
       nf1 = rat*ms
       if (2*nspread.gt.nf1) then
-         nf1 = next235(2d0*nspread) 
-      endif 
+         nf1 = next235(2d0*nspread)
+      endif
 c
-c     lambda (described above) = nspread/(rat*(rat-0.5d0)) 
+c     lambda (described above) = nspread/(rat*(rat-0.5d0))
 c     It is more convenient to define r2lamb = rat*rat*lambda
 c
       r2lamb = rat*rat * nspread / (rat*(rat-.5d0))
       hx = 2*pi/nf1
 c
 c     -----------------------------------
-c     Compute workspace size 
+c     Compute workspace size
 c     -----------------------------------
       iw1 = 2*nf1
       iwsav = iw1+nspread+1
@@ -181,7 +181,7 @@ c     -----------------------------------
 c
 c     ---------------------------------------------------------------
 c     Precompute spreading constants and initialize fw
-c     to hold one term needed for fast Gaussian gridding 
+c     to hold one term needed for fast Gaussian gridding
 c     ---------------------------------------------------------------
       t1 = pi/r2lamb
       do k1 = 1, nspread
@@ -204,7 +204,7 @@ c     2. spread source data onto nearest nspread grid points
 c        using fast Gaussian gridding.
 c
 c     The following is a little hard to read because it takes
-c     advantage of fast gridding and optimized to minimize the 
+c     advantage of fast gridding and optimized to minimize the
 c     the number of multiplies in the inner loops.
 c
 c    ---------------------------------------------------------------
@@ -255,8 +255,8 @@ c
 c
 c     ---------------------------------------------------------------
 c     Compute 1D FFT and carry out deconvolution.
-c 
-c     There is a factor of (-1)**k1 needed to account for the 
+c
+c     There is a factor of (-1)**k1 needed to account for the
 c     FFT phase shift.
 c     ---------------------------------------------------------------
 c
@@ -306,13 +306,13 @@ c     if (iflag .ge. 0) then
 c
 c              (ms-1)/2
 c     cj(j) =    SUM      fk(k1) exp(+i k1 xj(j))  for j = 1,...,nj
-c              k1= -ms/2                            
+c              k1= -ms/2
 c
 c     else
 c
 c              (ms-1)/2
 c     cj(j) =    SUM      fk(k1) exp(-i k1 xj(j))  for j = 1,...,nj
-c              k1= -ms/2                            
+c              k1= -ms/2
 c
 c ----------------------------------------------------------------------
 c     INPUT:
@@ -329,14 +329,14 @@ c     OUTPUT:
 c
 c     cj     output values (complex *16 array)
 c     ier    error return code
-c   
+c
 c            ier = 0  => normal execution.
 c            ier = 1  => precision eps requested is out of range.
 c
 c
 c     The type 2 algorithm proceeds in three steps (see [GL]).
 c
-c     1) deconvolve (amplify) each Fourier mode first 
+c     1) deconvolve (amplify) each Fourier mode first
 c     2) compute inverse FFT on uniform fine grid
 c     3) spread data to regular mesh using Gaussian
 c
@@ -359,16 +359,16 @@ c     -------------------------------
       endif
       if (eps.le.1d-11) then
          rat = 3.0d0
-      else 
+      else
          rat = 2.0d0
       endif
       nspread = int(-log(eps)/(pi*(rat-1d0)/(rat-.5d0)) + .5d0)
       nf1 = rat*ms
       if (2*nspread.gt.nf1) then
-         nf1 = next235(2d0*nspread) 
-      endif 
+         nf1 = next235(2d0*nspread)
+      endif
 c
-c     lambda (described above) = nspread/(rat*(rat-0.5d0)) 
+c     lambda (described above) = nspread/(rat*(rat-0.5d0))
 c     It is more convenient to define r2lamb = rat*rat*lambda
 c
 c     -------------------------------
@@ -379,15 +379,15 @@ c     -------------------------------
       endif
       if (eps.le.1d-11) then
          rat = 3.0d0
-      else 
+      else
          rat = 2.0d0
       endif
 c
       nspread = int(-log(eps)/(pi*(rat-1d0)/(rat-.5d0)) + .5d0)
       nf1 = rat*ms
       if (2*nspread.gt.nf1) then
-         nf1 = next235(2d0*nspread) 
-      endif 
+         nf1 = next235(2d0*nspread)
+      endif
 c
       r2lamb = rat*rat * nspread / (rat*(rat-.5d0))
       hx = 2*pi/nf1
@@ -405,7 +405,7 @@ c     -----------------------------------
 c
 c     ---------------------------------------------------------------
 c     Precompute spreading constants and initialize fw
-c     to hold one term needed for fast Gaussian gridding 
+c     to hold one term needed for fast Gaussian gridding
 c     ---------------------------------------------------------------
       t1 = pi/r2lamb
       do k1 = 1, nspread
@@ -518,13 +518,13 @@ c     if (iflag .ge. 0) then
 c
 c                  nj
 c     fk(sk(k)) = SUM cj(j) exp(+i sk(k) xj(j))  for k = 1,..., nk
-c                 j=1                            
+c                 j=1
 c
 c     else
 c
 c                  nj
 c     fk(sk(k)) = SUM cj(j) exp(-i sk(k) xj(j))  for k = 1,..., nk
-c                 j=1                            
+c                 j=1
 c ----------------------------------------------------------------------
 c     INPUT:
 c
@@ -541,7 +541,7 @@ c     OUTPUT:
 c
 c     fk     Fourier transform values (double complex array)
 c     ier    error return code
-c   
+c
 c            ier = 0  => normal execution.
 c            ier = 1  => precision eps requested is out of range.
 c
@@ -549,24 +549,24 @@ c
 c     References:
 c
 c     [DR] Fast Fourier transforms for nonequispaced data,
-c          A. Dutt and V. Rokhlin, SIAM J. Sci. Comput. 14, 
+c          A. Dutt and V. Rokhlin, SIAM J. Sci. Comput. 14,
 c          1368-1383, 1993.
 c
 c     [LG] The type 3 nonuniform FFT and its applications
 c          J.-Y. Lee and L. Greengard, J. Comput. Phys. 206, 1-5 (2005).
 c
-c     The algorithm is essentially a concatenation of the 
+c     The algorithm is essentially a concatenation of the
 c     type 1 and 2 transforms.
 c
-c     1) Gaussian gridding of strengths cj(j) centered at xj 
+c     1) Gaussian gridding of strengths cj(j) centered at xj
 c        to create f_\tau(n \Delta_x)  (in notation of [LG])
-c     2) Deconvolve each regular grid mode 
+c     2) Deconvolve each regular grid mode
 c        to create f^{-\sigma}_\tau(n \Delta_x)  (in notation of [LG])
 c     3) compute FFT on uniform mesh
 c        to create F^{-\sigma}_\tau(m \Delta_s)  (in notation of [LG])
 c     4) Gaussian gridding to irregular frequency points
 c        to create F_\tau(s_k)  (in notation of [LG])
-c     5) Deconvolution of  result 
+c     5) Deconvolution of  result
 c        to create F(s_k)  (in notation of [LG])
 c
 c***********************************************************************
@@ -611,7 +611,7 @@ c     carried out.
 c     -------------------------------
       if (eps.le.1d-11) then
          rat = sqrt(3.0d0)
-      else 
+      else
          rat = sqrt(2.0d0)
       endif
 c
@@ -625,7 +625,7 @@ c
       hs = 2d0*pi/dble(nf1)/hx            ! hx hs = 2.pi/nf1
 c
 c     -------------------------------
-c     Compute workspace size 
+c     Compute workspace size
 c     -------------------------------
 c
       kmax = int(nf1*(r2lamb1-nspread)/r2lamb1+.1d0)
@@ -639,7 +639,7 @@ c
 c
 c     ---------------------------------------------------------------
 c     Precompute spreading constants and initialize fw
-c     to hold one term needed for fast Gaussian gridding 
+c     to hold one term needed for fast Gaussian gridding
 c     ---------------------------------------------------------------
 c
       t1 = pi/r2lamb1
@@ -692,7 +692,7 @@ c
       if (iflag .lt. 0) sb = -sb
 c
 c ---------------------------------------------------------------
-c     Step 2: Deconvolve (amplify) as in Type 2 transform 
+c     Step 2: Deconvolve (amplify) as in Type 2 transform
 c     Step 3: Compute FFT with shift
 c             (-1)^k F_(k+M/2) = Sum (-1)^j F_(j+M/2) e(2pi ijk/M)
 c ---------------------------------------------------------------
